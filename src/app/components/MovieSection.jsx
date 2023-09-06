@@ -142,7 +142,7 @@ const MovieSection = () => {
 
         <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
           {
-            movies.length <= 0 ? <div>Movies will display here...</div> : movies?.Search?.map((movieData, index) => {
+            movies.length <= 0 ? <div className='p-4'>Movies will display here...</div> : movies?.Search?.map((movieData, index) => {
               return <MovieCard movieData={movieData} key={index} />
             })
           }
@@ -150,7 +150,7 @@ const MovieSection = () => {
 
         {/* Pagination */}
         <div className="p-4">
-            <h1>Page</h1>
+     
           <div className='flex flex-row flex-wrap gap-3 '>
             {Array.from({ length: Math.ceil(movies?.totalResults / moviesPerPage) }, (_, index) => (
               <button className='flex border w-8 h-8 justify-center items-center rounded-full hover:bg-blue-200 gap-2' key={index} onClick={() => handlePagination(index)}>
