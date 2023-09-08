@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
 import { useFormik } from 'formik';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const MovieCard = ({ movieData }) => {
 
@@ -17,7 +17,8 @@ const MovieCard = ({ movieData }) => {
     async function ratingPoint() {
       const res = await fetch(`/api/rating/${movieData.imdbID}`);
       const avg = await res.json();
-      console.log(avg);
+      console.log(res);
+      console.log(avg.ratingAverage);
       if(res.statusText === "rated"){
         setRatingAverage(avg.ratingAverage);
       }
