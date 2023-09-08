@@ -6,21 +6,27 @@ import Modal from './Modal';
 import { useFormik } from 'formik';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import toast from 'react-hot-toast';
+import {SlClose} from "react-icons/sl";
 
 const MovieCard = ({ movieData }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReadModalOpen, setIsReadModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [ratingAverage, setRatingAverage] = useState(0);
+  const [movieInfo, setMovieInfo] = useState(null);
 
   useEffect(() => {
     async function ratingPoint() {
       const res = await fetch(`/api/rating/${movieData.imdbID}`);
+      const mov = await fetch(`https://www.omdbapi.com/?apikey=bd1e323a&i=${movieData.imdbID}`);
       const avg = await res.json();
-      if(avg.status === "Rated"){
+      const movieInformation = await mov.json();
+      setMovieInfo(movieInformation);
+      if (avg.status === "Rated") {
         setRatingAverage(avg.ratingAverage);
       }
-      else{
+      else {
         setRatingAverage(0);
       }
     }
@@ -31,7 +37,7 @@ const MovieCard = ({ movieData }) => {
 
   const formik = useFormik({
     initialValues: {
-      movieTitle:"",
+      movieTitle: "",
       imdb_id: "",
       rating: { name: "", email: "", watch_date: "", mobile: "", rate_point: 0 },
     },
@@ -44,6 +50,14 @@ const MovieCard = ({ movieData }) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const openReadModal = () => {
+    setIsReadModalOpen(true);
+  };
+
+  const closeReadModal = () => {
+    setIsReadModalOpen(false);
   };
 
   // MAX Date
@@ -68,7 +82,7 @@ const MovieCard = ({ movieData }) => {
       },
       body: JSON.stringify(values)
     });
-    
+
     if (res.status == 201) {
       toast.success("Movie Rated successfully !");
       setLoading(false);
@@ -118,14 +132,15 @@ const MovieCard = ({ movieData }) => {
                   }
                 </p>
                 <p>Rating : {ratingAverage}</p>
+                <button className='my-4 px-4 py-2 rounded-full bg-blue-100 shadow shadow-blue-300 text-blue-900' onClick={() => openReadModal()}>Read more</button>
               </div>
             </div>
           </div>
       }
 
+      {/* Rating Modal */}
       <Modal isOpen={isModalOpen}>
         <h2 className="text-lg font-semibold mb-4">Rate this movie</h2>
-        {/* <p>{movieData.Title}</p> */}
         <form method="POST" onSubmit={formik.handleSubmit} className='grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 grid-cols-1  gap-4'>
           <div className="flex flex-col gap-y-1">
             <label htmlFor="name">Name</label>
@@ -170,7 +185,31 @@ const MovieCard = ({ movieData }) => {
             </button>
           </div>
         </form>
+      </Modal>
 
+      {/* Rating Modal */}
+      <Modal isOpen={isReadModalOpen}>
+        <div className="mb-4 flex justify-between items-center">
+        <h1 className='ps-1 text-xl'>Movie Detail</h1>
+        <button
+          type="button"
+          className="w-8 h-8 flex justify-center items-center hover:text-rose-500 rounded-full"
+          onClick={closeReadModal}
+        >
+          <SlClose size={32}/>
+        </button>
+        </div>
+        <div className="flex flex-col gap-y-3">
+          <h2 className="text-lg py-1 px-3 rounded-lg bg-slate-50 font-semibold">{movieInfo?.Title}</h2>
+          <p className="text-md py-1 px-3 rounded-lg bg-slate-50 font-medium italic">Directed By {movieInfo?.Director}</p>
+          <p className="text-md py-1 px-3 rounded-lg bg-slate-50 font-medium"><strong>Released on</strong> {movieInfo?.Released}</p>
+          <p className="text-md py-1 px-3 rounded-lg bg-slate-50 font-medium"><strong>Genre:</strong> <span>{movieInfo?.Genre}</span></p>
+          <p className="text-md py-1 px-3 rounded-lg bg-slate-50 font-medium"><strong>Starring:</strong> <span>{movieInfo?.Actors}</span></p>
+          <p className="text-md py-1 px-3 rounded-lg bg-slate-50 font-medium"><strong>Writers:</strong> <span>{movieInfo?.Writer}</span></p>
+          <p className="text-md py-1 px-3 rounded-lg bg-slate-50 font-medium"><strong>Language:</strong> <span>{movieInfo?.Language}</span></p>
+          <p className="text-md py-1 px-3 rounded-lg bg-slate-50 font-medium"><strong>imdbRating:</strong> <span>{movieInfo?.imdbRating}</span></p>
+          <p className="text-md py-1 px-3 rounded-lg bg-slate-50 font-medium"><strong>Description:</strong> <span>{movieInfo?.Plot}</span></p>
+        </div>
       </Modal>
     </>
   )
