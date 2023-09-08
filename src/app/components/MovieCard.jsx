@@ -17,17 +17,17 @@ const MovieCard = ({ movieData }) => {
     async function ratingPoint() {
       const res = await fetch(`/api/rating/${movieData.imdbID}`);
       const avg = await res.json();
-      console.log(res);
-      console.log(avg.ratingAverage);
-      if(res.statusText === "rated"){
+      if(res.status === 200){
         setRatingAverage(avg.ratingAverage);
+      }
+      else if(res.status === 404){
+        setRatingAverage(0);
       }
     }
     ratingPoint();
 
   }, [movieData]);
 
-  console.log(ratingAverage);
 
   const formik = useFormik({
     initialValues: {

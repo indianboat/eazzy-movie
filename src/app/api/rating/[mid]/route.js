@@ -22,7 +22,7 @@ export async function GET(request, {params}) {
       return new NextResponse(JSON.stringify({imdb_id:findMovies?.imdb_id, ratingAverage: avg}), {status:200, statusText:"rated"});
     }
     else{
-      return new NextResponse(JSON.stringify("Movie not found !!"), {status:200, statusText:"Movie not found !"});
+      return new NextResponse(JSON.stringify("Movie not found !!"), {status:404, statusText:"Movie not found !"});
     }
     
   } catch (error) {
