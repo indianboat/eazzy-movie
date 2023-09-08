@@ -74,23 +74,23 @@ const MovieCard = ({ movieData }) => {
   }
 
   useEffect(() => {
-    async function ratingPoint() {
+    async function ratingPoint(movieData) {
       const res = await fetch(`/api/rating/${movieData.imdbID}`);
       const avg = await res.json();
+      console.log(avg);
       if(res.statusText === "rated"){
         setRatingAverage(avg.ratingAverage);
       }
       else if(res.statusText === "Movie not found !"){
         setRatingAverage(0);
       }
-      else{
-        setRatingAverage(0);
-      }
     }
 
-    ratingPoint();
+    ratingPoint(movieData);
 
   }, [movieData]);
+
+  console.log(ratingAverage);
 
 
   return (

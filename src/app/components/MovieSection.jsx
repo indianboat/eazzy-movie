@@ -12,7 +12,6 @@ const MovieSection = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [moviesPerPage] = useState(10);
-  const [ratingAverage, setRatingAverage] = useState(0)
 
   const formik = useFormik({
     initialValues: {

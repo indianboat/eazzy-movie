@@ -26,6 +26,6 @@ export async function GET(request, {params}) {
     }
     
   } catch (error) {
-    return NextResponse.json({error:"500 Internal Server Error: " +error}, {status:500, statusText:"500 Internal Server Error"});
+    return NextResponse.json({error:"500 Internal Server Error: " + error}, {status:500, statusText:"500 Internal Server Error"});
   }
 }
