@@ -5,9 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
 import { useFormik } from 'formik';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
-import toast from 'react-hot-toast';
-import { redirect } from 'next/dist/server/api-utils';
-
+import toast, { Toaster } from 'react-hot-toast';
 
 const MovieCard = ({ movieData }) => {
 
@@ -53,13 +51,10 @@ const MovieCard = ({ movieData }) => {
       },
       body: JSON.stringify(values)
     });
-    formik.resetForm();
-    closeModal();
-
+    
     if (res.statusText == "Movie Rated") {
       toast.success("Movie Rated successfully !");
       setLoading(false);
-      
     }
     else if (res.statusText == "You Already Rated this movie") {
       toast.error("You already rated this movie !");
@@ -72,7 +67,10 @@ const MovieCard = ({ movieData }) => {
     else if (res.statusText == "Internal Server Error") {
       toast.error("Internal Server Error");
       setLoading(false);
-    } 
+    }
+
+    formik.resetForm();
+    closeModal();
   }
 
   useEffect(() => {
