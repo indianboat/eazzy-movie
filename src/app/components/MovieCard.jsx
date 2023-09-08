@@ -13,6 +13,24 @@ const MovieCard = ({ movieData }) => {
   const [loading, setLoading] = useState(false);
   const [ratingAverage, setRatingAverage] = useState(0);
 
+  useEffect(() => {
+    async function ratingPoint(movieData) {
+      const res = await fetch(`/api/rating/${movieData.imdbID}`);
+      const avg = await res.json();
+      console.log(avg);
+      if(res.statusText === "rated"){
+        setRatingAverage(avg.ratingAverage);
+      }
+      else if(res.statusText === "Movie not found !"){
+        setRatingAverage(0);
+      }
+    }
+    ratingPoint(movieData);
+
+  }, [movieData]);
+
+  console.log(ratingAverage);
+
   const formik = useFormik({
     initialValues: {
       movieTitle:"",
@@ -72,26 +90,6 @@ const MovieCard = ({ movieData }) => {
     formik.resetForm();
     closeModal();
   }
-
-  useEffect(() => {
-    async function ratingPoint(movieData) {
-      const res = await fetch(`/api/rating/${movieData.imdbID}`);
-      const avg = await res.json();
-      console.log(avg);
-      if(res.statusText === "rated"){
-        setRatingAverage(avg.ratingAverage);
-      }
-      else if(res.statusText === "Movie not found !"){
-        setRatingAverage(0);
-      }
-    }
-
-    ratingPoint(movieData);
-
-  }, [movieData]);
-
-  console.log(ratingAverage);
-
 
   return (
     <>
