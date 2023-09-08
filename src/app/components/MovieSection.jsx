@@ -50,25 +50,21 @@ const MovieSection = () => {
 
       if (result.Error === "Movie not found!") {
         toast.error("Movie not found !");
-        setLoading(false);
         setMovies([]);
       }
 
       else if (result.Error === "Series not found!") {
         toast.error("Series not found!!");
-        setLoading(false);
         setMovies([]);
       }
 
       else if (result.Error === "Too many results.") {
         toast.error("Too many results. need more specific title");
-        setLoading(false);
         setMovies([]);
       }
 
       else if (result.Response === "False" && result.Error === "Incorrect IMDb ID.") {
         toast.error("Incorrect IMDb ID.");
-        setLoading(false);
         setMovies([]);
       }
       else {
@@ -85,7 +81,6 @@ const MovieSection = () => {
         if(result?.Search?.length > 0){
           setMovies(result);
         }
-        setLoading(false);
       }
     }
   }

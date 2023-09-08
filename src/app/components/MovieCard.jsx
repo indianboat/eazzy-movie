@@ -56,6 +56,7 @@ const MovieCard = ({ movieData }) => {
   let yyyy = new Date().getFullYear();
 
   async function onSubmit(values) {
+
     formik.values.movieTitle = movieData.Title;
     formik.values.imdb_id = movieData.imdbID;
 
@@ -68,19 +69,19 @@ const MovieCard = ({ movieData }) => {
       body: JSON.stringify(values)
     });
     
-    if (res.statusText == "Movie Rated") {
+    if (res.status == 201) {
       toast.success("Movie Rated successfully !");
       setLoading(false);
     }
-    else if (res.statusText == "You Already Rated this movie") {
+    else if (res.status == 422) {
       toast.error("You already rated this movie !");
       setLoading(false);
     }
-    else if (res.statusText == "Rating Added") {
+    else if (res.status == 200) {
       toast.success("Rating Added !");
       setLoading(false);
     }
-    else if (res.statusText == "Internal Server Error") {
+    else if (res.status == 500) {
       toast.error("Internal Server Error");
       setLoading(false);
     }
