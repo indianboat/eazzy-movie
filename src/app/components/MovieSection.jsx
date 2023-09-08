@@ -6,12 +6,17 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from "react-hot-toast";
 import Loading from './Loading';
 
+import ResponsivePagination from 'react-responsive-pagination';
+import 'react-responsive-pagination/themes/classic.css';
+
 const MovieSection = () => {
 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [moviesPerPage] = useState(10);
+  const totalPages = Math.ceil(movies.totalResults / moviesPerPage);
+
 
   const formik = useFormik({
     initialValues: {
@@ -22,12 +27,6 @@ const MovieSection = () => {
     },
     onSubmit
   });
-
-  const handlePagination = (index) => {
-    setCurrentPage(index + 1);
-    window.scrollTo(0, 0);
-  }
-
 
   async function onSubmit(values) {
     setLoading(true);
@@ -70,15 +69,15 @@ const MovieSection = () => {
       else {
         toast.success("Movie found !");
         let obj = {
-          Response:true,
-          Search:[],
-          totalResults:1
+          Response: true,
+          Search: [],
+          totalResults: 1
         };
         if (result) {
           obj.Search.push(result)
           setMovies(obj)
         }
-        if(result?.Search?.length > 0){
+        if (result?.Search?.length > 0) {
           setMovies(result);
         }
       }
@@ -89,9 +88,10 @@ const MovieSection = () => {
     if (formik.values.movieTitle !== "") {
       onSubmit(formik.values);
     }
+    window.scroll(0, 0);
   }, [currentPage]);
 
-  
+
   return (
     <>
       <Toaster />
@@ -144,16 +144,16 @@ const MovieSection = () => {
         </div>
 
         {/* Pagination */}
-        <div className="p-4">
-     
-          <div className='flex flex-row flex-wrap gap-3 '>
-            {Array.from({ length: Math.ceil(movies?.totalResults / moviesPerPage) }, (_, index) => (
-              <button className='flex border w-8 h-8 justify-center items-center rounded-full hover:bg-blue-200 gap-2' key={index} onClick={() => handlePagination(index)}>
-                {index + 1}
-              </button>
-            ))}
-          </div>
-        </div>
+        {
+          totalPages > 1 ? <div className="w-fit flex flex-col px-4 py-2 gap-y-2">
+            <h1>Page</h1>
+            <ResponsivePagination
+              current={currentPage}
+              total={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div> : null
+        }
       </div>
     </>
   )

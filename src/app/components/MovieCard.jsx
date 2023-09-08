@@ -17,10 +17,10 @@ const MovieCard = ({ movieData }) => {
     async function ratingPoint() {
       const res = await fetch(`/api/rating/${movieData.imdbID}`);
       const avg = await res.json();
-      if(res.status === 200){
+      if(avg.status === "Rated"){
         setRatingAverage(avg.ratingAverage);
       }
-      else if(res.status === 404){
+      else{
         setRatingAverage(0);
       }
     }
