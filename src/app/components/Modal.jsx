@@ -11,7 +11,7 @@ const Modal = ({ isOpen, children }) => {
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-white dark:bg-neutral-800 p-6 rounded shadow-md"
+            className="bg-white dark:bg-neutral-800 p-8 rounded-xl shadow-md"
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}

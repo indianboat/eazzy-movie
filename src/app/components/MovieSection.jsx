@@ -3,7 +3,6 @@
 import MovieCard from './MovieCard';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
 import toast, { Toaster } from "react-hot-toast";
 import Loading from './Loading';
 
@@ -13,6 +12,7 @@ const MovieSection = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [moviesPerPage] = useState(10);
+  const [ratingAverage, setRatingAverage] = useState(0)
 
   const formik = useFormik({
     initialValues: {
@@ -26,8 +26,8 @@ const MovieSection = () => {
 
   const handlePagination = (index) => {
     setCurrentPage(index + 1);
+    window.scrollTo(0, 0);
   }
-
 
 
   async function onSubmit(values) {
@@ -84,7 +84,7 @@ const MovieSection = () => {
           setMovies(obj)
         }
         if(result?.Search?.length > 0){
-          setMovies(result)
+          setMovies(result);
         }
         setLoading(false);
       }
@@ -97,6 +97,7 @@ const MovieSection = () => {
     }
   }, [currentPage]);
 
+  
   return (
     <>
       <Toaster />
